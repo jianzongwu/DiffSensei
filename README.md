@@ -37,6 +37,7 @@ DiffSensei can generate controllable black-and-white manga panels with flexible 
 
 ## 🎉 News
 
+- [2025-2-5] The reference training code is released (t2i + condition + mllm)!
 - [2024-12-13] A new version of gradio demo without MLLM is released (Much fewer memory usage)!
 - [2024-12-10] Checkpoint, dataset, and inference code are released!
 
@@ -107,12 +108,48 @@ Please download MangaZero from [Huggingface](https://huggingface.co/datasets/jia
 
 After downloading the annotation file, please place the annotation file in `data/mangazero/annotations.json` and run `scripts/dataset/download_mangazero.py` to download and organize the images.
 
-
 ``` bash
 python -m scripts.dataset.download_mangazero \
   --ann_path data/mangazero/annotations.json \
   --output_image_root data/mangazero/images
 ```
+
+
+### Reference Training Code
+
+We release the reference training code for t2i training, condition training, and MLLM training. This code is made publicly available to support future research efforts. However, please note that the code is still in the testing phase and cannot be guaranteed to run without adjustments. We recommend modifying the code to suit your own dataset and specific requirements.
+
+Before training, please download the checkpoints from [IP-Adaptor](https://huggingface.co/h94/IP-Adapter), [SDXL](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0), and [SEED-X](https://huggingface.co/AILab-CVC/SEED-X-17B) (For MLLM training only.)
+
+The reference code for stage 1 (t2i training) is at `scripts/train/trian_t2i.py`.
+
+``` bash
+accelerate launch \
+  --multi_gpu \
+  -m scripts.train.train_t2i.yaml \
+  --config_path configs/train/diffsensei/t2i.yaml \
+```
+
+The reference code for stage 2 (condition training) is at `scripts/train/train.py`
+
+``` bash
+accelerate launch \
+  --multi_gpu \
+  -m scripts.train.train \
+  --config_path configs/train/diffsensei/self_0.5.yaml
+```
+
+The reference code for stage 3 (MLLM training) is at `scripts/train/train_mllm.py`
+
+``` bash
+accelerate launch \
+  --multi_gpu \
+  -m scripts.train.train_mllm \
+  --config_path configs/train/diffsensei/mllm.yaml
+```
+
+The config files in each script command contain the checkpoint paths.
+
 
 ## Citation
 

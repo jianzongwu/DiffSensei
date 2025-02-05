@@ -1,0 +1,89 @@
+model:
+  pretrained_model_path: checkpoints/stable-diffusion-xl-base-1.0
+  manga_pretrained_model_path: "change_to_the_.pth_path_from_self_0.5_training"
+  image_encoder_path: checkpoints/ip-adapter/models/image_encoder
+  magi_image_encoder_path: checkpoints/magi
+  unet_trained_parameters: ip
+
+  max_num_ips: 4
+  num_vision_tokens: 16
+  num_dummy_tokens: 16
+  max_num_dialogs: 8
+
+  seed_x_tokenizer_path: checkpoints/seed-x/cvlm_llama2_tokenizer_100img_and_224loc_addpatch
+  pretrained_llm_path: checkpoints/seed-x/seed_x/llm
+  lora_config:
+    r: 64
+    lora_alpha: 64
+    modules_to_save:
+      - input_layernorm
+      - post_attention_layernorm
+      - norm
+    target_modules: 
+      - q_proj 
+      - v_proj 
+      - k_proj 
+      - o_proj 
+      - gate_proj 
+      - down_proj 
+      - up_proj
+    task_type: CAUSAL_LM
+    lora_dropout: 0.05
+  vocab_size: 32330
+  # SEED-X-agent
+  agent:
+    input_resampler: 
+      grid_size: 8
+      embed_dim: 5120
+      num_heads: 32
+      kv_dim: 2048
+    output_resampler:
+      grid_size: 8
+      embed_dim: 2048
+      num_heads: 32
+      kv_dim: 5120
+    mse: True
+    lm_loss_scale: 1.0
+    rec_loss_scale: 6.0
+
+train_data:
+  ann_path: data/mangadex/annotations/48/train.json
+  image_root: "data/mangadex/images"
+  t_drop_rate: 0.05
+  i_drop_rate: 0.05
+  c_drop_rate: 0.05
+  mask_dialog: false
+  laod_context_image: false
+  ip_self_condition_rate: 0.5
+  max_num_ip_sources: 1
+  min_ip_height: 3
+  min_ip_width: 3
+  max_token_length: 256
+  num_img_tokens: 64
+  num_loc_tokens: 224
+  max_caption_length: 77
+
+optimizer:
+  learning_rate: 1e-4
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 1.0e-08
+  adam_weight_decay: 0.01
+
+lr_scheduler:
+  name: constant
+  lr_warmup_steps: 100
+  lr_num_cycles: 1
+  lr_power: 1.0
+
+train_batch_size: 16
+mllm_loss_weight: 1
+
+gradient_accumulation_steps: 1
+mixed_precision: bf16
+
+max_train_steps: 100000
+checkpointing_steps: []
+checkpointing_interval: 5000
+evaluation_steps: []
+evaluation_interval: 5000

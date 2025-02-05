@@ -1,0 +1,62 @@
+model:
+  pretrained_model_path: "checkpoints/stable-diffusion-xl-base-1.0"
+  manga_t2i_model_path: "change_to_the_.pth_path_from_t2i_training"
+  pretrained_ip_adapter_path: "checkpoints/ip-adapter/sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors"
+  manga_pretrained_model_path: null
+  image_encoder_path: "checkpoints/ip-adapter/models/image_encoder"
+  magi_image_encoder_path: checkpoints/magi
+  unet_trained_parameters: full
+
+  ip_adapter_plus: true
+  max_num_ips: 4
+  num_vision_tokens: 16
+  num_dummy_tokens: 16
+  
+  dialog_bbox_encode_type: "mask"
+  max_num_dialogs: 8
+
+  context_adapter: false
+  pretrained_context_proj: false
+
+  lora_rank: 128
+
+  ip_contrastive_loss: null
+  ip_contrastive_loss_weight: 1.0
+
+train_data:
+  type: "size_bucket"
+  ann_path: data/mangadex/annotations/48/train.json
+  image_root: "data/mangadex/images"
+  t_drop_rate: 0.05
+  i_drop_rate: 0.05
+  c_drop_rate: 0.05
+  mask_dialog: false
+  laod_context_image: false
+  ip_self_condition_rate: 0.5
+  max_num_ip_sources: 1
+  min_ip_height: 3
+  min_ip_width: 3
+
+optimizer:
+  learning_rate: 1e-5
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 1.0e-08
+  adam_weight_decay: 0.01
+
+lr_scheduler:
+  name: constant
+  lr_warmup_steps: 0
+  lr_num_cycles: 1
+  lr_power: 1.0
+
+train_batch_size: 8
+
+gradient_accumulation_steps: 1
+mixed_precision: bf16
+
+max_train_steps: 400000
+checkpointing_steps: []
+checkpointing_interval: 10000
+evaluation_steps: []
+evaluation_interval: 10000
