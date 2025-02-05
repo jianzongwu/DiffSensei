@@ -1,0 +1,42 @@
+# Set up the manga generation parameters
+def create_manga_script():
+    script = {
+        "title": "The Forgotten Relic",
+        "chapters": [
+            {
+                "title": "Bab 1: Awal Perjalanan",
+                "scenes": [
+                    {
+                        "description": "Kael menemukan medali kuno di reruntuhan dekat desa.",
+                        "dialogue": [
+                            {"character": "Kael", "line": "Apa ini? Kenapa benda ini terasa hidup?"},
+                            {"object": "Medali", "line": "Temukan Tiga Pilar. Dunia bergantung padamu."}
+                        ],
+                        "action": "Kael melihat kilasan penglihatan tentang kota besar di tengah hutan."
+                    }
+                ]
+            },
+            {
+                "title": "Bab 2: Pertemuan Takdir",
+                "scenes": [
+                    {
+                        "description": "Kael bertemu Lyra di jalan dan mereka berselisih sebelum akhirnya bekerja sama.",
+                        "dialogue": [
+                            {"character": "Lyra", "line": "Siapa kamu? Jangan berani-berani menyentuh artefak itu!"},
+                            {"character": "Kael", "line": "Aku tidak mencurinya! Benda ini... bicara padaku."}
+                        ],
+                        "action": "Lyra akhirnya memutuskan bergabung dengan Kael setelah mendengar suara medali."
+                    }
+                ]
+            }
+        ]
+    }
+    return script
+
+# Generate manga script
+def generate_manga():
+    script = create_manga_script()
+    diffsensei.generate_manga(script)
+
+# Call the function to execute the generation
+generate_manga()
